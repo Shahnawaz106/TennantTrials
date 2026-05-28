@@ -84,18 +84,20 @@ export default function Dashboard() {
   return (
     <div style={{ minHeight: '100vh', background: '#f9fafb' }}>
       <nav style={styles.navbar}>
-        <span style={styles.navBrand}>TenantTrails</span>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-          <div style={{ position: 'relative' }}>
-            <span style={styles.searchIcon}>🔍</span>
-            <input type="text" placeholder="Search apartments by address or neighbourhood..."
-              value={search} onChange={e => setSearch(e.target.value)} style={styles.searchInput} />
-          </div>
-          <div style={styles.avatar}>{initials}</div>
-          <span style={{ fontSize: 14, fontWeight: 500 }}>{user?.name}</span>
-          <button onClick={handleLogout} style={styles.signOutBtn}>Sign out</button>
-        </div>
-      </nav>
+  <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+    <span style={styles.navBrand}>TenantTrails</span>
+    <div style={{ position: 'relative' }}>
+      <span style={styles.searchIcon}>🔍</span>
+      <input type="text" placeholder="Search apartments by address or neighbourhood..."
+        value={search} onChange={e => setSearch(e.target.value)} style={styles.searchInput} />
+    </div>
+  </div>
+  <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+    <div style={styles.avatar}>{initials}</div>
+    <span style={{ fontSize: 14, fontWeight: 500 }}>{user?.name}</span>
+    <button onClick={handleLogout} style={styles.signOutBtn}>Sign out</button>
+  </div>
+</nav>
 
       <div style={styles.container}>
         <h1 style={{ fontSize: 28, fontWeight: 700, marginBottom: 4 }}>Apartments in Halifax</h1>
@@ -139,8 +141,7 @@ const styles = {
   navbar: { background: '#fff', borderBottom: '1px solid #e5e7eb', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 28px', height: 56, position: 'sticky', top: 0, zIndex: 10 },
   navBrand: { fontSize: 18, fontWeight: 700, color: '#2563eb' },
   searchIcon: { position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)', fontSize: 14 },
-  searchInput: { paddingLeft: 32, paddingRight: 14, paddingTop: 8, paddingBottom: 8, border: '1.5px solid #d1d5db', borderRadius: 8, fontSize: 13, width: 320, background: '#f9fafb' },
-  avatar: { width: 34, height: 34, borderRadius: '50%', background: '#dbeafe', color: '#1d4ed8', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, fontWeight: 600 },
+  searchInput: { paddingLeft: 32, paddingRight: 14, paddingTop: 8, paddingBottom: 8, border: '1.5px solid #d1d5db', borderRadius: 20, fontSize: 13, width: 500, background: '#f9fafb' },  avatar: { width: 34, height: 34, borderRadius: '50%', background: '#dbeafe', color: '#1d4ed8', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, fontWeight: 600 },
   signOutBtn: { background: 'none', border: 'none', fontSize: 14, color: '#6b7280', cursor: 'pointer' },
   container: { maxWidth: 1200, margin: '0 auto', padding: '32px 28px' },
   statPill: { background: '#f3f4f6', border: '1px solid #e5e7eb', borderRadius: 20, padding: '5px 14px', fontSize: 13, fontWeight: 500, color: '#374151' },
