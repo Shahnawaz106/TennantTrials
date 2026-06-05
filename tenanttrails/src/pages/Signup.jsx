@@ -2,26 +2,29 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext.jsx'
 
-// Exported so it can be unit tested independently
-export function validate(email, password) {
-  const e = {}
-  if (!email.includes('@')) e.email = 'Invalid email'
-  if (password.length < 6) e.password = 'Too short'
-  return e
-}
-
-export default function Login() {
-  const { login } = useAuth()
+export default function Signup() {
+  const { register } = useAuth()
   const navigate = useNavigate()
+  const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [confirm, setConfirm] = useState('')
   const [errors, setErrors] = useState({})
+
+  function validate() {
+    const e = {}
+    if (!name.trim()) e.name = 'Name is required'
+    if (!email.includes('@')) e.email = 'Invalid email'
+    if (password.length < 6) e.password = 'At least 6 characters'
+    if (password !== confirm) e.confirm = 'Passwords do not match'
+    return e
+  }
 
   function handleSubmit(event) {
     event.preventDefault()
-    const e = validate(email, password)
+    const e = validate()
     if (Object.keys(e).length > 0) { setErrors(e); return }
-    const result = login(email, password)
+    const result = register(name, email, password)
     if (result.error) { setErrors({ submit: result.error }); return }
     navigate('/dashboard')
   }
@@ -30,31 +33,42 @@ export default function Login() {
     <div style={styles.bg}>
       <div style={styles.card}>
         <h1 style={styles.brand}>TenantTrails</h1>
-        <p style={styles.sub}>See what past tenants had to say, before you sign.</p>
+        <p style={styles.sub}>Create your account to submit reviews and comments.</p>
         <form onSubmit={handleSubmit} style={styles.form}>
           <div style={styles.field}>
+            <label style={styles.label}>Full name</label>
+            <input type="text" placeholder="Your name" value={name}
+              onChange={e => setName(e.target.value)}
+              style={{ ...styles.input, ...(errors.name ? styles.inputError : {}) }} />
+            {errors.name && <span style={styles.err}>{errors.name}</span>}
+          </div>
+          <div style={styles.field}>
             <label style={styles.label}>Email</label>
-            <input type="email" placeholder="alex@dal.ca" value={email}
+            <input type="email" placeholder="you@example.com" value={email}
               onChange={e => setEmail(e.target.value)}
               style={{ ...styles.input, ...(errors.email ? styles.inputError : {}) }} />
             {errors.email && <span style={styles.err}>{errors.email}</span>}
           </div>
           <div style={styles.field}>
             <label style={styles.label}>Password</label>
-            <input type="password" placeholder="••••••••••" value={password}
+            <input type="password" placeholder="At least 6 characters" value={password}
               onChange={e => setPassword(e.target.value)}
               style={{ ...styles.input, ...(errors.password ? styles.inputError : {}) }} />
             {errors.password && <span style={styles.err}>{errors.password}</span>}
           </div>
+          <div style={styles.field}>
+            <label style={styles.label}>Confirm password</label>
+            <input type="password" placeholder="Repeat password" value={confirm}
+              onChange={e => setConfirm(e.target.value)}
+              style={{ ...styles.input, ...(errors.confirm ? styles.inputError : {}) }} />
+            {errors.confirm && <span style={styles.err}>{errors.confirm}</span>}
+          </div>
           {errors.submit && <span style={styles.err}>{errors.submit}</span>}
-          <button type="submit" style={styles.btnPrimary}>Sign In</button>
+          <button type="submit" style={styles.btnPrimary}>Create Account</button>
         </form>
         <p style={styles.switchText}>
-          Don't have an account? <Link to="/signup" style={styles.link}>Create one</Link>
+          Already have an account? <Link to="/login" style={styles.link}>Sign in</Link>
         </p>
-        <div style={styles.demoBox} onClick={() => { setEmail('alex@dal.ca'); setPassword('password123'); setErrors({}) }}>
-          Demo: <strong>alex@dal.ca / password123</strong>
-        </div>
       </div>
     </div>
   )
@@ -74,5 +88,4 @@ const styles = {
   btnPrimary: { background: '#2563eb', color: '#fff', border: 'none', borderRadius: 8, padding: 12, fontSize: 15, fontWeight: 600, cursor: 'pointer', marginTop: 4 },
   switchText: { textAlign: 'center', fontSize: 14, marginTop: 14, color: '#6b7280' },
   link: { color: '#2563eb', fontWeight: 500 },
-  demoBox: { marginTop: 18, padding: '10px 14px', background: '#eff6ff', borderRadius: 8, fontSize: 13, color: '#1d4ed8', textAlign: 'center', cursor: 'pointer' },
 }
